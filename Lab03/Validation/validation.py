@@ -11,8 +11,8 @@ def validString(message = "Your input > "):
 
 def validatePasswrd(message = "Your password > "):
     userInput = input(message)
-    if len(userInput) < 8:
-        return validatePasswrd('Your passwrd must be 8 chars at least, try again > ')
+    if len(userInput) < 4:
+        return validatePasswrd('Your passwrd must be 4 chars at least, try again > ')
     return userInput
 
 def validateConfirmPassword(password, message = "Confirm passwrd > "):
