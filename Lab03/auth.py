@@ -10,6 +10,7 @@ First name
 """
 
 from email.policy import default
+from FileHandler.fileHandler import insertUser
 import Validation.validation as vf
 
 
@@ -23,6 +24,7 @@ fields = (["first name", vf.validString],
 
 def register():
     userData = dict()
+    userData['id'] = ''
     for field in fields:
         validationFunction = field[1]
         fieldName = field[0]
@@ -32,7 +34,10 @@ def register():
         else:
             value = validationFunction(message = f"{fieldName} > ")
         userData[fieldName] = value
-
+    del userData["confirm password"]
+    success, userId = insertUser(userData)
+    if success: 
+        return success, userId
     
 
 def start():
@@ -42,10 +47,10 @@ def start():
     option = input("#> ")
     match option:
         case "1":
-            register()
+            return register()
         case "2":
-            register
+            return register()
         case "3":
             exit()
         case _:
-            start()
+            return start()
