@@ -3,10 +3,11 @@
 
 from time import time
 
+_DB = './Lab03/DB'
 
 def write(fileName, line):
     try:
-        file = open(fileName,"a")
+        file = open(f'{_DB}/{fileName}',"a")
     except Exception as e:
         print(e)
     else:
@@ -17,7 +18,7 @@ def write(fileName, line):
 
 def writeAll(fileName, lines):
     try:
-        file = open(fileName,"a")
+        file = open(f'{_DB}/{fileName}',"a")
     except Exception as e:
         print(e)
     else:
@@ -34,7 +35,3 @@ def toRow(data: dict):
     return row
 
 
-def insertUser(user):
-    user['id'] = int(time())
-    row = toRow(user)
-    return write('./Lab03/DB/user.txt',row), user['id']

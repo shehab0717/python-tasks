@@ -10,7 +10,7 @@ First name
 """
 
 from email.policy import default
-from FileHandler.fileHandler import insertUser
+from Services.user_services import insertUser
 import Validation.validation as vf
 
 
@@ -39,6 +39,10 @@ def register():
     if success: 
         return success, userId
     
+
+def login():
+    pass
+
 
 def start():
     print("""--------- Welcome to fundraising system ----------------
