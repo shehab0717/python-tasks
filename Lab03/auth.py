@@ -1,3 +1,4 @@
+
 import Services.user_services as userServices
 import Validation.validation as vf
 
@@ -27,15 +28,20 @@ def register():
     
 
 
-def login():
-    email = input('email > ')
-    password = input('password > ')
+def login(tries=3):
+    if tries == 0:
+        print("You made 3 wrong attempts")
+        return False, -1
+    email = vf.validateEmail()
+    password = vf.validatePasswrd()
     def rule(userData: dict):
         return userData['email'] == email and userData['password'] == password
     user = userServices.search(rule)
     if user:
         return True, user
-    return False, None
+    print("Wrong credentials !!")
+    return login(tries-1)
+
 
 def start():
     print("""--------- Welcome to fundraising system ----------------
