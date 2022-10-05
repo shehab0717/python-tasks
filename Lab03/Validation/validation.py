@@ -3,11 +3,11 @@
 import re
 
 
-def validString(message = "Your input > "):
+def validateString(message = "Your input > "):
     userInput = input(message)
     if userInput and  not userInput.isspace():
         return userInput
-    return validString("Please enter a valid string > ")
+    return validateString("Please enter a valid string > ")
 
 def validatePasswrd(message = "Your password > "):
     userInput = input(message)

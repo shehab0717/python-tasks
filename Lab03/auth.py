@@ -14,8 +14,8 @@ from FileHandler.fileHandler import insertUser
 import Validation.validation as vf
 
 
-fields = (["first name", vf.validString],
-          ["last name", vf.validString],
+fields = (["first name", vf.validateString],
+          ["last name", vf.validateString],
           ["email", vf.validateEmail], 
           ["password", vf.validatePasswrd], 
           ["confirm password", vf.validateConfirmPassword], 
