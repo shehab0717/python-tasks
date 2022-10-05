@@ -4,8 +4,8 @@ import auth
 
 
 def app():
-    authinticated, userId = auth.start()
-    print(f"User id: {userId}")
+    authinticated, user = auth.start()
+    print(f"{user}")
 
 
 app()

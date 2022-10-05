@@ -1,16 +1,4 @@
-
-"""
-First name
-• Last name
-• Email
-• Password
-• Confirm password
-• Mobile phone
-
-"""
-
-from email.policy import default
-from Services.user_services import insertUser
+import Services.user_services as userServices
 import Validation.validation as vf
 
 
@@ -35,14 +23,19 @@ def register():
             value = validationFunction(message = f"{fieldName} > ")
         userData[fieldName] = value
     del userData["confirm password"]
-    success, userId = insertUser(userData)
-    if success: 
-        return success, userId
+    return userServices.insertUser(userData)
     
 
-def login():
-    pass
 
+def login():
+    email = input('email > ')
+    password = input('password > ')
+    def rule(userData: dict):
+        return userData['email'] == email and userData['password'] == password
+    user = userServices.search(rule)
+    if user:
+        return True, user
+    return False, None
 
 def start():
     print("""--------- Welcome to fundraising system ----------------
@@ -51,7 +44,7 @@ def start():
     option = input("#> ")
     match option:
         case "1":
-            return register()
+            return login()
         case "2":
             return register()
         case "3":
