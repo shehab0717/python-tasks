@@ -1,5 +1,6 @@
 
 import os.path
+from pyclbr import Function
 
 
 _DB = './Lab03/DB'
@@ -61,6 +62,9 @@ def getFileHeader(fileName):
         return header
 
 def assignWithHeader(row, fileHeader):
+    #remove \n from the row and file header
+    row = row[:-1]
+    fileHeader = fileHeader[:-1]
     fields = row.split(':')
     cols = fileHeader.split(':')
     data = dict()
@@ -93,3 +97,20 @@ def toRow(data):
         row += f'{value}:'
     row = row[:-1] + '\n'
     return row
+
+def findAll(fileName, rule: Function):
+    try:
+        file = open(filePath(fileName), 'r')
+    except Exception as e:
+        print(e)
+        return None
+    else: 
+        lines = file.readlines()
+        results = []
+        fileHeader = getFileHeader(fileName)
+        for line in lines:
+            data = assignWithHeader(line, fileHeader)
+            if rule(data):
+                results.append(data)
+        return results
+
