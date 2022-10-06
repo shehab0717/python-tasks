@@ -19,4 +19,11 @@ def getAll(userId):
 
 def find(rule: Function):
     return fileHandler.find(fileName, rule)
+
+def update(updatedProject):
+    return fileHandler.update(fileName, updatedProject)
     
+def delete(projectId): 
+    def rule(data):
+        return data['id'] == projectId
+    return fileHandler.delete(fileName, rule)
