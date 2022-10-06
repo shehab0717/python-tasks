@@ -1,4 +1,3 @@
-
 import os.path
 from pyclbr import Function
 
@@ -24,10 +23,13 @@ def checkFile(fileName, fileHeader):
     return True
 
 
-def write(fileName, fileHeader, line):
+def write(fileName, fileHeader, line, append=True):
     if checkFile(fileName, fileHeader):
+        mode = "a"
+        if not append: 
+            mode = "w"
         try:
-            file = open(filePath(fileName), "a")
+            file = open(filePath(fileName), mode)
         except Exception as e:
             print(e)
             return False
@@ -38,17 +40,20 @@ def write(fileName, fileHeader, line):
     return False
 
 
-def writeAll(fileName, fileHeader, lines):
+def writeAll(fileName, fileHeader, lines: list, append=True):
     if checkFile(fileName, fileHeader):
+        mode = "a"
+        if not append: 
+            mode = "w"
         try:
-            file = open(filePath(fileName), "a")
+            file = open(filePath(fileName), mode)
         except Exception as e:
             print(e)
         else:
             file.writelines(lines)
             file.close()
             return True
-
+    return False
 
 def getFileHeader(fileName):
     try:
@@ -61,8 +66,9 @@ def getFileHeader(fileName):
         file.close()
         return header
 
+
 def assignWithHeader(row, fileHeader):
-    #remove \n from the row and file header
+    # remove \n from the row and file header
     row = row[:-1]
     fileHeader = fileHeader[:-1]
     fields = row.split(':')
@@ -71,7 +77,6 @@ def assignWithHeader(row, fileHeader):
     for i in range(len(fields)):
         data[cols[i]] = fields[i]
     return data
-        
 
 
 def find(fileName, rule):
@@ -91,6 +96,7 @@ def find(fileName, rule):
         file.close()
         return None
 
+
 def toRow(data):
     row = ''
     for value in data:
@@ -98,13 +104,14 @@ def toRow(data):
     row = row[:-1] + '\n'
     return row
 
+
 def findAll(fileName, rule: Function):
     try:
         file = open(filePath(fileName), 'r')
     except Exception as e:
         print(e)
         return None
-    else: 
+    else:
         lines = file.readlines()
         results = []
         fileHeader = getFileHeader(fileName)
@@ -115,3 +122,21 @@ def findAll(fileName, rule: Function):
         file.close()
         return results
 
+
+def delete(fileName, rule: Function):
+    def ruleToAll(data):
+        return True
+    all = findAll(fileName, ruleToAll)
+    remaining = []
+    for entry in all:
+        if not rule(entry):
+            remaining.append(toRow(entry.values()))
+    return writeAll(fileName, getFileHeader(fileName), remaining, append=False)
+
+def update(fileName, newData):
+    def rule(data):
+        return data['id'] == newData['id']
+    deleted = delete(fileName, rule)
+    if deleted:
+        return write(fileName, getFileHeader(fileName), toRow(newData.values()))
+    return False
