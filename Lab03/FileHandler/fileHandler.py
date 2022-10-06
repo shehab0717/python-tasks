@@ -112,5 +112,6 @@ def findAll(fileName, rule: Function):
             data = assignWithHeader(line, fileHeader)
             if rule(data):
                 results.append(data)
+        file.close()
         return results
 
