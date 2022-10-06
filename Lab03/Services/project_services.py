@@ -10,3 +10,8 @@ fileName = 'project.txt'
 def insert(project: dict):
     line = fileHandler.toRow(project.values())
     return fileHandler.write(fileName, fileHeader, line)
+
+def getAll(userId):
+    def rule(data):
+        return data['userId']==userId
+    return fileHandler.findAll(fileName, rule)
