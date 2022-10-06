@@ -5,6 +5,32 @@ import auth
 import Validation.validation as vf
 import Services.project_services as projectServices
 
+def updateProject():
+    projectId = input("Enter the project id: ")
+    return False
+
+def deleteProject():
+    projectId = input("Enter the project id: ")
+    return False
+
+def projectsMenue():
+    print("1- Update\n2- Delete\n3- back")
+    choice = input(" > ")
+    match choice:
+        case "1":
+            updated = updateProject()
+            if not updated:
+                return projectsMenue()
+
+        case "2":
+            deleted = deleteProject()
+            if not deleted:
+                return projectsMenue()
+        case "3":
+            return
+        case _:
+            return projectsMenue()
+
 
 def displayAllProjects(userId):
     projects = projectServices.getAll(userId)
@@ -13,7 +39,8 @@ def displayAllProjects(userId):
               f"Details: {project['details']}\nTarget: {project['target']}\n"
               f"Start date: {project['start date']}\nEnd date: {project['end date']}\n"
               "----------------------------------------------------------------------")
-
+    projectsMenue()
+    
 
 fields = (["title", vf.validateString],
           ["details", vf.validateString],
@@ -36,9 +63,12 @@ def newProject(userId):
         print('Error happened!!')
     return project
 
-
+authinticated = False
+user = None
 def app():
-    authinticated, user = auth.start()
+    global authinticated, user
+    if not authinticated: 
+        authinticated, user = auth.start()
     if authinticated:
         print(f"----------- welcome {user['first name']} ------------")
         print('1- New project \n2- list all projects \n3- exit')
@@ -47,8 +77,12 @@ def app():
         match choice:
             case "1":
                 newProject(user['id'])
+                app()
             case "2":
                 displayAllProjects(user['id'])
+                app()
+            case "3":
+                exit()
             case _:
                 app()
     else:
